@@ -25,7 +25,10 @@ function get_issue_data( $repo, $issue ) {
 
 function get_repo_for_channel( $channel ) {
 	switch ( $channel ) {
+		case 'owains-humble-hovel':
 		case 'happytables':
+		case 'happytables-dev':
+		case 'happytables-growth':
 			return 'humanmade/happytables';
 
 		case 'servers':
