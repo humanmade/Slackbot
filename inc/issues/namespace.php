@@ -139,7 +139,7 @@ function parse_issue_message( $responses, $data ) {
 }
 
 function parse_issue_link( $responses, $data ) {
-	$matched = preg_match_all( '#(?:^|\s)https?://github\.com/(\w+)/(\w+)/(?:issue|pull)/(\d+)\b#i', $data['text'], $all_matches, PREG_SET_ORDER );
+	$matched = preg_match_all( '#(?:^|\b)https?://github\.com/(\w+)/(\w+)/(?:issue|pull)/(\d+)\b#i', $data['text'], $all_matches, PREG_SET_ORDER );
 	if ( ! $matched ) {
 		return;
 	}
