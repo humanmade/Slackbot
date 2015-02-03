@@ -137,3 +137,32 @@ function parse_issue_message( $responses, $data ) {
 
 	return $responses;
 }
+
+function parse_issue_link( $responses, $data ) {
+	$matched = preg_match_all( '#(?:^|\s)https?://github\.com/(\w+)/(\w+)/(?:issue|pull)/(\d+)\b#i', $data['text'], $all_matches, PREG_SET_ORDER );
+	if ( ! $matched ) {
+		return;
+	}
+
+	foreach ( $all_matches as $matches ) {
+		$repo = sprintf( '%s/%s', $matches[1], $matches[2] );
+		$issue_num = absint( $matches[3] );
+
+		$response = get_issue_data( $repo, $issue_num );
+		if ( is_wp_error( $response ) ) {
+			continue;
+		}
+		if ( wp_remote_retrieve_response_code( $response ) !== 200 ) {
+			continue;
+		}
+
+		$issue = json_decode( $response['body'] );
+		if ( $issue === null ) {
+			continue;
+		}
+
+		$responses[] = format_issue_as_attachment( $repo, $issue );
+	}
+
+	return $responses;
+}
