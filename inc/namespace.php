@@ -39,6 +39,8 @@ function handle_webhook() {
 	$data = wp_unslash( $_POST );
 
 	handle_message( $data );
+
+	exit;
 }
 
 /**
