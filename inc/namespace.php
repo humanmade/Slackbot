@@ -38,11 +38,7 @@ function autoload( $class ) {
 function handle_webhook() {
 	$data = wp_unslash( $_POST );
 
-	$message = handle_message( $data );
-
-	if ( isset( $_GET['debug'] ) ) {
-		var_dump( $message );
-	}
+	handle_message( $data );
 
 	exit;
 }
