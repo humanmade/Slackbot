@@ -108,7 +108,7 @@ function format_issue_as_attachment( $repo, $issue ) {
 function parse_issue_message( $responses, $data ) {
 	$matched = preg_match_all( '/(?:^|\s)#(\d+)\b/', $data['text'], $all_matches, PREG_SET_ORDER );
 	if ( ! $matched ) {
-		return;
+		return $responses;
 	}
 
 	foreach ( $all_matches as $matches ) {
@@ -141,7 +141,7 @@ function parse_issue_message( $responses, $data ) {
 function parse_issue_link( $responses, $data ) {
 	$matched = preg_match_all( '#(?:^|\b)https?://github\.com/(\w+)/(\w+)/(?:issue|pull)/(\d+)\b#i', $data['text'], $all_matches, PREG_SET_ORDER );
 	if ( ! $matched ) {
-		return;
+		return $responses;
 	}
 
 	foreach ( $all_matches as $matches ) {
