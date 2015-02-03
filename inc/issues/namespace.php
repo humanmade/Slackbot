@@ -108,6 +108,7 @@ function format_issue_as_attachment( $repo, $issue ) {
 function parse_issue_message( $responses, $data ) {
 	$matched = preg_match_all( '/(?:^|\s)#(\d+)\b/', $data['text'], $all_matches, PREG_SET_ORDER );
 	if ( ! $matched ) {
+		if ( isset( $_GET['debug'] ) ) var_dump( __LINE__, $matched );
 		return;
 	}
 
@@ -116,19 +117,23 @@ function parse_issue_message( $responses, $data ) {
 		$channel = $data['channel_name'];
 		$repo = get_repo_for_channel( $channel );
 		if ( empty( $repo ) ) {
+			if ( isset( $_GET['debug'] ) ) var_dump( __LINE__, $matches, $channel );
 			continue;
 		}
 
 		$response = get_issue_data( $repo, $issue_num );
 		if ( is_wp_error( $response ) ) {
+			if ( isset( $_GET['debug'] ) ) var_dump( __LINE__, $response );
 			continue;
 		}
 		if ( wp_remote_retrieve_response_code( $response ) !== 200 ) {
+			if ( isset( $_GET['debug'] ) ) var_dump( __LINE__, $response );
 			continue;
 		}
 
 		$issue = json_decode( $response['body'] );
 		if ( $issue === null ) {
+			if ( isset( $_GET['debug'] ) ) var_dump( __LINE__, $response );
 			continue;
 		}
 
