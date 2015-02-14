@@ -1,0 +1,5 @@
+{
+	"require": {
+		"devristo/phpws": "dev-master"
+	}
+}
