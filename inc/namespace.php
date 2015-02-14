@@ -7,7 +7,7 @@ use HM\Slack;
 function autoload( $class ) {
 	$prefix = 'HM\\Slack\\Bot';
 	$prefix_length = strlen( $prefix );
-	$path = __DIR__ . '/inc';
+	$path = __DIR__ . '/';
 
 	if ( strpos( $class, $prefix . '\\' ) !== 0 ) {
 		return;
