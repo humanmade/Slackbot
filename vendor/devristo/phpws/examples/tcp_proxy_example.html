@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TCP Proxy</title>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+</head>
+<body>
+
+<h1>Tcp proxy</h1>
+<p>Check JS Console for details</p>
+
+<h2>Request</h2>
+<pre id="GetRequest">
+
+</pre>
+
+<h2>Response</h2>
+<pre id="GetResponse">
+
+</pre>
+
+
+<script>
+    var ProxyWebSocket = function(address){
+        var self = this;
+        var promises = {};
+        var transactionId = 0;
+
+        var openPromise = $.Deferred();
+
+        this.address = address;
+
+        this.socket = new WebSocket(this.address);
+
+        this.socket.addEventListener("open", function(){
+            openPromise.resolveWith(self);
+        });
+
+        this.socket.addEventListener("message", function(message){
+            message = JSON.parse(message.data);
+
+            if ('tag' in message && message.tag in promises){
+                promises[message.tag].resolveWith(self, [message]);
+            }
+        });
+
+        this.getResponseTo = function(message){
+            var promise = $.Deferred();
+            transactionId = transactionId + 1;
+            promises[transactionId] = promise;
+
+            message.tag = transactionId;
+
+            this.socket.send(JSON.stringify(message));
+
+            return promise;
+        };
+
+        this.open = function(){
+            return openPromise;
+        };
+
+        this.close = function(){
+            this.socket.close();
+
+            return this;
+        };
+
+        this.addEventListener = function(){
+            this.socket.addEventListener.apply(this.socket, arguments);
+
+            return this;
+        };
+
+        this.sendObject = function(message){
+            this.socket.send(JSON.stringify(message));
+
+            return this;
+        };
+    };
+
+    console.log("Connecting to phpws");
+    var webSocket = new ProxyWebSocket("ws://localhost:12345/proxy");
+
+    var Connection = (function(webSocket){
+        var connections = {};
+
+        // Fire events on incoming data for a connection
+        webSocket.addEventListener("message", function(message){
+            message = JSON.parse(message.data);
+
+            if('connection' in message && message.connection in connections){
+                connections[message.connection].publish(message.event, message);
+            }
+        });
+
+        return function(address){
+            var self = this;
+            this.id = null;
+            this.address = address;
+
+            var callbacks = {};
+
+            var connectPromise = $.Deferred();
+
+            webSocket.getResponseTo( {
+                'command'   : 'connect',
+                'address'   : address
+            }).then(function(message){
+                self.id = message.connection;
+                connections[self.id] = self;
+                self.publish("connect");
+                connectPromise.resolveWith(self);
+            });
+
+            this.connect = function(){
+                return connectPromise;
+            };
+
+            this.subscribe = function(event, callback){
+                if(!(event in callbacks))
+                    callbacks[event] = $.Callbacks();
+
+                callbacks[event].add.apply(callbacks[event], Array.prototype.slice.call(arguments, 1));
+                return this;
+            };
+
+            this.unsubscribe = function(event, callback){
+                if(event in callbacks){
+                    callbacks[event].remove.apply(callbacks[event], Array.prototype.slice.call(arguments, 1));
+                }
+
+                return this;
+            };
+
+            this.publish = function(event){
+                if(event in callbacks){
+                    callbacks[event].fireWith(this, Array.prototype.slice.call(arguments, 1));
+                }
+
+                return this;
+            };
+
+            this.send = function(message){
+                webSocket.sendObject({
+                    'command': 'write',
+                    'connection': self.id,
+                    'data': message
+                });
+
+                return this;
+            };
+
+            this.close = function(){
+                webSocket.sendObject({
+                    'command': 'close',
+                    'connection': self.id
+                });
+            };
+        };
+    })(webSocket);
+
+    // When opened just ask the server to open a connection to google.com on port 80. When opened send a HTTP GET
+    // request. Log any responses to console
+    webSocket.addEventListener("close", function(){
+        console.log("WebSocket connection has been closed!")
+    }).open().then(function(){
+        console.log("Connected to phpws");
+
+        var connection = new Connection("www.google.com:80");
+        connection.subscribe("data", function(message){
+            console.group("Got HTTP response");
+                console.log(message.data);
+                document.getElementById("GetResponse").innerText += message.data;
+            console.groupEnd();
+
+            console.log("Close TCP Proxy connection to " + this.address);
+            this.close();
+        }).subscribe("connect", function(){
+            console.log("We have connected to " + this.address);
+        }).subscribe("close", function(){
+            console.log("Connection to " + this.address + " has been closed");
+            console.log("Closing WebSocket connection to phpws on ", webSocket.address);
+            webSocket.close();
+        }).connect().then(function(){
+            console.group("Sending GET request");
+                var request = "GET / HTTP/1.1\r\nHost: www.google.com\r\nUser-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.0.3) Gecko/20060426 Firefox/1.5.0.3\r\nAccept: text/xml,text/html,text/plain,image/png,image/jpeg,image/gif\r\nAccept-Charset: ISO-8859-1,utf-8\r\n\r\n";
+                console.log(request);
+                document.getElementById("GetRequest").innerText = request;
+                this.send(request);
+            console.groupEnd();
+        });
+    });
+</script>
+
+</body>
+</html>

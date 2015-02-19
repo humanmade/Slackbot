@@ -1,0 +1,16 @@
+<html>
+    <head>
+        <title>Timers</title>
+    </head>
+    <body>
+        <h1>Server Time</h1>
+        <div>Status: <span id="status"></span></div>
+        <div>Time: <span style="font-size:bold;" id="time"></span></div>
+        <script type ="text/javascript">
+            var socket = new WebSocket("ws://localhost:12345");
+	    	socket.onopen    	= function(msg){ document.getElementById("status").innerHTML = 'Online'; };
+	    	socket.onclose   	= function(msg){ document.getElementById("status").innerHTML = 'Offline'; }
+	    	socket.onmessage 	= function(msg){ document.getElementById("time").innerHTML = msg.data; };
+        </script> 
+    </body>
+</html>
