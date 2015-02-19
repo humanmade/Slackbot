@@ -14,6 +14,9 @@ require_once __DIR__ . '/inc/issues/namespace.php';
 require_once __DIR__ . '/vendor/autoload.php';
 spl_autoload_register( __NAMESPACE__ . '\\autoload' );
 
+// Force using our fork of phpws
+require_once __DIR__ . '/phpws/src/Devristo/Phpws/Client/WebSocket.php';
+
 add_filter( 'hm.slack.bot.message.message', __NAMESPACE__ . '\\Issues\\parse_issue_message', 10, 2 );
 add_filter( 'hm.slack.bot.message.message', __NAMESPACE__ . '\\Issues\\parse_issue_link', 10, 2 );
 
