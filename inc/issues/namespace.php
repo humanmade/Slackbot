@@ -105,16 +105,27 @@ function format_issue_as_attachment( $repo, $issue ) {
 	return $data;
 }
 
-function parse_issue_message( $responses, $data ) {
-	$matched = preg_match_all( '/(?:^|\s)#(\d+)\b/', $data['text'], $all_matches, PREG_SET_ORDER );
-	if ( ! $matched ) {
-		return $responses;
+function parse_issue_message( $message, $bot ) {
+	if ( empty( $message->text ) ) {
+		return;
 	}
+
+	$matched = preg_match_all( '/(?:^|\s)#(\d+)\b/', $message->text, $all_matches, PREG_SET_ORDER );
+	if ( ! $matched ) {
+		return;
+	}
+
+	// Show that we're typing while we fetch the data
+	$typing = array(
+		'type' => 'typing',
+		'channel' => $message->channel,
+	);
+	$bot->send( $typing );
 
 	foreach ( $all_matches as $matches ) {
 		$issue_num = absint( $matches[1] );
-		$channel = $data['channel_name'];
-		$repo = get_repo_for_channel( $channel );
+		$channel = $bot->get_channel( $message->channel );
+		$repo = get_repo_for_channel( $channel->get_name() );
 		if ( empty( $repo ) ) {
 			continue;
 		}
@@ -135,14 +146,29 @@ function parse_issue_message( $responses, $data ) {
 		$responses[] = format_issue_as_attachment( $repo, $issue );
 	}
 
-	return $responses;
+	$message = array(
+		'attachments' => $responses,
+		'channel' => $message->channel,
+	);
+	$bot->send( $message );
 }
 
-function parse_issue_link( $responses, $data ) {
-	$matched = preg_match_all( '#(?:^|\b)https?://github\.com/(\w+)/(\w+)/(?:issue|pull)/(\d+)\b#i', $data['text'], $all_matches, PREG_SET_ORDER );
-	if ( ! $matched ) {
-		return $responses;
+function parse_issue_link( $message, $bot ) {
+	if ( empty( $message->text ) ) {
+		return;
 	}
+
+	$matched = preg_match_all( '#(?:^|\b)https?://github\.com/(\w+)/(\w+)/(?:issue|pull)/(\d+)\b#i', $message->text, $all_matches, PREG_SET_ORDER );
+	if ( ! $matched ) {
+		return;
+	}
+
+	// Show that we're typing while we fetch the data
+	$typing = array(
+		'type' => 'typing',
+		'channel' => $message->channel,
+	);
+	$bot->send( $typing );
 
 	foreach ( $all_matches as $matches ) {
 		$repo = sprintf( '%s/%s', $matches[1], $matches[2] );
@@ -164,5 +190,14 @@ function parse_issue_link( $responses, $data ) {
 		$responses[] = format_issue_as_attachment( $repo, $issue );
 	}
 
-	return $responses;
+	if ( empty( $responses ) ) {
+		return;
+	}
+
+	$message = array(
+		'type' => 'message',
+		'attachments' => $responses,
+		'channel' => $message->channel,
+	);
+	$bot->send( $message );
 }
