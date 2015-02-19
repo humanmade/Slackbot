@@ -23,3 +23,26 @@ add_filter( 'hm.slack.bot.message.message', __NAMESPACE__ . '\\Issues\\parse_iss
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	WP_CLI::add_command( 'hm-slackbot', __NAMESPACE__ . '\\CLI' );
 }
+
+/**
+ * Reply to hello!
+ *
+ * This is an example of how to use the bot :)
+ */
+add_action( 'hm.slack.bot.message.message', function ( $message, $bot ) {
+	if ( empty( $message->text ) ) {
+		return;
+	}
+
+	$pattern = '/^(hello|hi|what\'s up|wassup) rmbot/i';
+	if ( ! preg_match( $pattern, $message->text ) ) {
+		return;
+	}
+
+	$reply = array(
+		'type' => 'message',
+		'channel' => $message->channel,
+		'text' => 'Hello to you too!',
+	);
+	$bot->send( $reply );
+}, 10, 2 );
