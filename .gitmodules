@@ -1,0 +1,3 @@
+[submodule "phpws"]
+	path = phpws
+	url = git@github.com:humanmade/phpws.git
