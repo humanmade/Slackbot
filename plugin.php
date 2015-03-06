@@ -104,13 +104,13 @@ add_action( 'hm.slack.bot.message', function ( $message, $bot ) {
 		'hi',
 		'what\'?s up',
 		'wassup',
-		'(yo ?)*',
+		'(yo ?)+',
 		'what\'?s the hiphap',
 	);
 
 	$matcher = '(?:' . implode( '|', $phrases ) . ')';
-	$name = $bot->get_name();
-	$pattern = "/^($matcher @?$name|@?$name:? $matcher)[!?]?/i";
+	$name = $bot->get_matchable_name();
+	$pattern = "/^($matcher $name|$name:? $matcher)[!?]?/i";
 	if ( ! preg_match( $pattern, $message->text ) ) {
 		return;
 	}
