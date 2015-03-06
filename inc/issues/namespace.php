@@ -106,6 +106,7 @@ function format_issue_as_attachment( $repo, $issue ) {
 }
 
 function parse_issue_message( $message, $bot ) {
+	return;
 	if ( empty( $message->text ) ) {
 		return;
 	}
