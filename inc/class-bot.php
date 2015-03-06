@@ -65,29 +65,10 @@ class Bot {
 	}
 
 	protected function start_session() {
-		$url = 'https://slack.com/api/rtm.start';
-		$args = array(
-			'token' => $this->token,
+		$options = array(
+			'blocking' => true,
 		);
-		$options = array();
-
-		$url = add_query_arg( $args, $url );
-		$response = wp_remote_post( $url, $options );
-		if ( is_wp_error( $response ) ) {
-			return $response;
-		}
-
-		if ( wp_remote_retrieve_response_code( $response ) !== 200 ) {
-			return new WP_Error( 'hm.slack.bot.could_not_start_session', '', compact( 'url', 'args', 'response' ) );
-		}
-
-		$body = wp_remote_retrieve_body( $response );
-		$data = json_decode( $body );
-		if ( empty( $data ) || $data->ok !== true ) {
-			return new WP_Error( 'hm.slack.bot.could_not_start_session', '', compact( 'url', 'args', 'response' ) );
-		}
-
-		return $data;
+		return $this->send_via_api( 'rtm.start', array(), $options );
 	}
 
 	protected function get_client( $url, $loop ) {
@@ -150,10 +131,51 @@ class Bot {
 		$data = (array) $data;
 		$data['id'] = $id;
 
+		var_dump( $data );
+
 		$encoded = json_encode( $data );
 		$this->client->send( $encoded );
 
 		return $id;
+	}
+
+	public function send_via_api( $method, $data = array(), $options = array() ) {
+		$url = sprintf( 'https://slack.com/api/%s', $method );
+		$defaults = array(
+			'token' => $this->token,
+		);
+		$data = array_merge( $defaults, $data );
+
+		$default_options = array(
+			'body' => $data,
+			'blocking' => false,
+		);
+		$options = array_merge( $default_options, $options );
+		$response = wp_remote_post( $url, $options );
+		if ( is_wp_error( $response ) || ! $options['blocking'] ) {
+			return $response;
+		}
+
+		if ( wp_remote_retrieve_response_code( $response ) !== 200 ) {
+			return new WP_Error( 'hm.slack.bot.bad_response', '', compact( 'url', 'options', 'response' ) );
+		}
+
+		$body = wp_remote_retrieve_body( $response );
+		$data = json_decode( $body );
+		if ( empty( $data ) || $data->ok !== true ) {
+			return new WP_Error( 'hm.slack.bot.bad_response', '', compact( 'url', 'options', 'response' ) );
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Disconnect from the server
+	 */
+	public function disconnect() {
+		do_action( 'hm.slack.bot.disconnect', $this );
+
+		$this->client->close();
 	}
 
 	/**
