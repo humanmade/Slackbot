@@ -154,11 +154,7 @@ function parse_issue_message( $message, $bot ) {
 }
 
 function parse_issue_link( $message, $bot ) {
-	if ( empty( $message->text ) ) {
-		return;
-	}
-
-	$matched = preg_match_all( '#(?:^|\b)https?://github\.com/(\w+)/(\w+)/(?:issue|pull)/(\d+)\b#i', $message->text, $all_matches, PREG_SET_ORDER );
+	$matched = preg_match_all( '#<https?://github\.com/(\w+)/(\w+)/(?:issues|pull)/(\d+)>#i', $message->text, $all_matches, PREG_SET_ORDER );
 	if ( ! $matched ) {
 		return;
 	}
