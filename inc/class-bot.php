@@ -155,4 +155,15 @@ class Bot {
 
 		return $id;
 	}
+
+	/**
+	 * Get the bot's name
+	 *
+	 * Hardcoded for now...
+	 *
+	 * @return string
+	 */
+	public function get_name() {
+		return 'rmbot';
+	}
 }

@@ -47,7 +47,19 @@ add_action( 'hm.slack.bot.message.message', function ( $message, $bot ) {
  * This is an example of how to use the bot :)
  */
 add_action( 'hm.slack.bot.message', function ( $message, $bot ) {
-	$pattern = '/^(hello|hey|hi|what\'?s up|wassup|(yo ?)*|what\'?s the hiphap) rmbot/i';
+	$phrases = array(
+		'hello',
+		'hey',
+		'hi',
+		'what\'?s up',
+		'wassup',
+		'(yo ?)*',
+		'what\'?s the hiphap',
+	);
+
+	$matcher = '(?:' . implode( '|', $phrases ) . ')';
+	$name = $bot->get_name();
+	$pattern = "/^($matcher @?$name|@?$name:? $matcher)[!?]?/i";
 	if ( ! preg_match( $pattern, $message->text ) ) {
 		return;
 	}
