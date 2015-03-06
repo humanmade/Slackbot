@@ -188,4 +188,13 @@ class Bot {
 	public function get_name() {
 		return 'rmbot';
 	}
+
+	public function get_matchable_name() {
+		return '(?:<@U03M7H4V5>|rmbot)';
+	}
+
+	public function is_admin( $user ) {
+		// Only rmccue
+		return $user === 'U03BWLTDD';
+	}
 }
