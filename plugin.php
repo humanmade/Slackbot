@@ -28,15 +28,25 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 }
 
 /**
+ * Send convenience action
+ *
+ * Rather than always hooking into `message.message` and checking for extra
+ * pieces, this lets you do the common case.
+ */
+add_action( 'hm.slack.bot.message.message', function ( $message, $bot ) {
+	if ( empty( $message->text ) || ! empty( $message->subtype ) ) {
+		return;
+	}
+
+	do_action( 'hm.slack.bot.message', $message, $bot );
+} );
+
+/**
  * Reply to hello!
  *
  * This is an example of how to use the bot :)
  */
-add_action( 'hm.slack.bot.message.message', function ( $message, $bot ) {
-	if ( empty( $message->text ) ) {
-		return;
-	}
-
+add_action( 'hm.slack.bot.message', function ( $message, $bot ) {
 	$pattern = '/^(hello|hey|hi|what\'?s up|wassup|(yo ?)*|what\'?s the hiphap) rmbot/i';
 	if ( ! preg_match( $pattern, $message->text ) ) {
 		return;
