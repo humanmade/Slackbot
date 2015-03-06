@@ -184,9 +184,9 @@ function parse_issue_link( $message, $bot ) {
 	}
 
 	$message = array(
-		'type' => 'message',
-		'attachments' => $responses,
+		'attachments' => json_encode( $responses ),
 		'channel' => $message->channel,
+		'as_user' => true,
 	);
-	$bot->send( $message );
+	$bot->send_via_api( 'chat.postMessage', $message );
 }
