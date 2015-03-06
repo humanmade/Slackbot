@@ -159,13 +159,6 @@ function parse_issue_link( $message, $bot ) {
 		return;
 	}
 
-	// Show that we're typing while we fetch the data
-	$typing = array(
-		'type' => 'typing',
-		'channel' => $message->channel,
-	);
-	$bot->send( $typing );
-
 	foreach ( $all_matches as $matches ) {
 		$repo = sprintf( '%s/%s', $matches[1], $matches[2] );
 		$issue_num = absint( $matches[3] );
