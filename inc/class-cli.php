@@ -13,6 +13,10 @@ class CLI extends WP_CLI_Command {
 	 * : Run with debug logging enabled
 	 */
 	public function run( $_, $assoc_args ) {
+		// Ensure we're running unbuffered
+		if ( ob_get_level() )
+			ob_end_clean();
+
 		if ( ! defined( 'HM_SLACK_BOT_TOKEN' ) ) {
 			return WP_CLI::error( 'Slack bot token is not defined. Please add it to your wp-config' );
 		}
