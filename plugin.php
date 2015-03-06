@@ -37,7 +37,7 @@ add_action( 'hm.slack.bot.message.message', function ( $message, $bot ) {
 		return;
 	}
 
-	$pattern = '/^(hello|hi|what\'s up|wassup) rmbot/i';
+	$pattern = '/^(hello|hey|hi|what\'?s up|wassup|(yo ?)*|what\'?s the hiphap) rmbot/i';
 	if ( ! preg_match( $pattern, $message->text ) ) {
 		return;
 	}
