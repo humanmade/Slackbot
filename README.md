@@ -39,3 +39,12 @@ define( 'HM_SLACK_BOT_ADMIN_ID', 'U03BWLTDD' );
 ```bash
 $ wp hm-slackbot run
 ```
+
+## Running Permanently
+
+If you want to keep Slackbot running all the time, it's best to run it as a
+daemon. This will keep it running in the background.
+
+To do this, simply add `bin/start.sh` to your system's cron, with an interval of
+every minute (`*` in the minute column). This will check every minute that the
+bot is still running.
