@@ -14,7 +14,7 @@ define( 'HM_SLACK_INCOMING_URL', 'https://hooks.slack.com/services/your/incoming
 define( 'HM_SLACK_BOT_TOKEN', 'my-bot-token' );
 
 // GitHub integration token for issues
-define( 'HM_SLACK_GITHUB_TOKEN', '1f12c23dfd4e991e2170d78877e0049fabcec22e' );
+define( 'HM_SLACK_GITHUB_TOKEN', 'myexampletokenfromgithub' );
 ```
 
 4. Run the bot
