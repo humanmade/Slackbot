@@ -24,22 +24,12 @@ function get_issue_data( $repo, $issue ) {
 }
 
 function get_repo_for_channel( $channel ) {
-	switch ( $channel ) {
-		case 'owains-humble-hovel':
-		case 'happytables':
-		case 'happytables-dev':
-		case 'happytables-growth':
-			return 'humanmade/happytables';
-
-		case 'servers':
-			return 'humanmade/hm-master';
-
-		case 'backupwordpress':
-			return 'humanmade/backupwordpress';
-
-		default:
-			return null;
+	$repos = apply_filters( 'hm.slack.bot.issues.repo_mapping', array() );
+	if ( isset( $repos[ $channel ] ) ) {
+		return $repos[ $channel ];
 	}
+
+	return null;
 }
 
 function format_issue_as_attachment( $repo, $issue ) {
@@ -106,7 +96,6 @@ function format_issue_as_attachment( $repo, $issue ) {
 }
 
 function parse_issue_message( $message, $bot ) {
-	return;
 	if ( empty( $message->text ) ) {
 		return;
 	}
@@ -148,10 +137,11 @@ function parse_issue_message( $message, $bot ) {
 	}
 
 	$message = array(
-		'attachments' => $responses,
+		'attachments' => json_encode( $responses ),
 		'channel' => $message->channel,
+		'as_user' => true,
 	);
-	$bot->send( $message );
+	$bot->send_via_api( 'chat.postMessage', $message );
 }
 
 function parse_issue_link( $message, $bot ) {
