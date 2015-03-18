@@ -15,6 +15,13 @@ define( 'HM_SLACK_BOT_TOKEN', 'my-bot-token' );
 
 // GitHub integration token for issues
 define( 'HM_SLACK_GITHUB_TOKEN', 'myexampletokenfromgithub' );
+
+// Set up the bot's name
+define( 'HM_SLACK_BOT_NAME', 'rmbot' );
+define( 'HM_SLACK_BOT_ID',   'U03M7H4V5' );
+
+// Set up bot admin (user ID)
+define( 'HM_SLACK_BOT_ADMIN_ID', 'U03BWLTDD' );
 ```
 
 4. Run the bot

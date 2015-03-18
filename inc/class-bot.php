@@ -186,15 +186,15 @@ class Bot {
 	 * @return string
 	 */
 	public function get_name() {
-		return 'rmbot';
+		return HM_SLACK_BOT_NAME;
 	}
 
 	public function get_matchable_name() {
-		return '(?:<@U03M7H4V5>|rmbot)';
+		return '(?:<@' . HM_SLACK_BOT_ID . '>|' . HM_SLACK_BOT_NAME . ')';
 	}
 
 	public function is_admin( $user ) {
 		// Only rmccue
-		return $user === 'U03BWLTDD';
+		return $user === HM_SLACK_BOT_ADMIN_ID;
 	}
 }
