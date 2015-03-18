@@ -2,8 +2,19 @@
 
 ## How to run
 
-1. Enable hm-slack
-2. Enable hm-slackbot
+1. Enable [hm-slack](https://github.com/humanmade/hm-slack) first, then enable
+   this plugin as well.
+
+   (HM-Slack contains utilities, such as escaping functions.)
+
+2. Head over to [your Slack integrations page](https://slack.com/services), and
+   create a new bot user.
+
+   This will give you an API token, which you'll need in a second.
+
+3. For full features, you'll also need an Incoming Webhook integration, so set
+   one of those up too.
+
 3. Configure hm-slackbot in your `wp-config.php`:
 
 ```php
