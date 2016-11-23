@@ -3,6 +3,7 @@
 namespace React\Tests\Stream;
 
 use React\Stream\Stream;
+use Clue\StreamFilter as Filter;
 
 class StreamTest extends TestCase
 {
@@ -48,6 +49,72 @@ class StreamTest extends TestCase
 
         $conn->handleData($stream);
         $this->assertSame("foobar\n", $capturedData);
+    }
+
+    /**
+     * @covers React\Stream\Stream::__construct
+     * @covers React\Stream\Stream::handleData
+     */
+    public function testDataEventDoesEmitOneChunkMatchingBufferSize()
+    {
+        $stream = fopen('php://temp', 'r+');
+        $loop = $this->createLoopMock();
+
+        $capturedData = null;
+
+        $conn = new Stream($stream, $loop);
+        $conn->on('data', function ($data) use (&$capturedData) {
+            $capturedData = $data;
+        });
+
+        fwrite($stream, str_repeat("a", 100000));
+        rewind($stream);
+
+        $conn->handleData($stream);
+
+        $this->assertTrue($conn->isReadable());
+        $this->assertEquals($conn->bufferSize, strlen($capturedData));
+    }
+
+    /**
+     * @covers React\Stream\Stream::__construct
+     * @covers React\Stream\Stream::handleData
+     */
+    public function testDataEventDoesEmitOneChunkUntilStreamEndsWhenBufferSizeIsInfinite()
+    {
+        $stream = fopen('php://temp', 'r+');
+        $loop = $this->createLoopMock();
+
+        $capturedData = null;
+
+        $conn = new Stream($stream, $loop);
+        $conn->bufferSize = null;
+
+        $conn->on('data', function ($data) use (&$capturedData) {
+            $capturedData = $data;
+        });
+
+        fwrite($stream, str_repeat("a", 100000));
+        rewind($stream);
+
+        $conn->handleData($stream);
+
+        $this->assertFalse($conn->isReadable());
+        $this->assertEquals(100000, strlen($capturedData));
+    }
+
+    /**
+     * @covers React\Stream\Stream::handleData
+     */
+    public function testEmptyStreamShouldNotEmitData()
+    {
+        $stream = fopen('php://temp', 'r+');
+        $loop = $this->createLoopMock();
+
+        $conn = new Stream($stream, $loop);
+        $conn->on('data', $this->expectCallableNever());
+
+        $conn->handleData($stream);
     }
 
     /**
@@ -106,6 +173,62 @@ class StreamTest extends TestCase
         $conn->on('data', function ($data, $stream) {
             $stream->close();
         });
+
+        fwrite($stream, "foobar\n");
+        rewind($stream);
+
+        $conn->handleData($stream);
+    }
+
+    /**
+     * @covers React\Stream\Stream::handleData
+     */
+    public function testDataFiltered()
+    {
+        $stream = fopen('php://temp', 'r+');
+
+        // add a filter which removes every 'a' when reading
+        Filter\append($stream, function ($chunk) {
+            return str_replace('a', '', $chunk);
+        }, STREAM_FILTER_READ);
+
+        $loop = $this->createLoopMock();
+
+        $capturedData = null;
+
+        $conn = new Stream($stream, $loop);
+        $conn->on('data', function ($data) use (&$capturedData) {
+            $capturedData = $data;
+        });
+
+        fwrite($stream, "foobar\n");
+        rewind($stream);
+
+        $conn->handleData($stream);
+        $this->assertSame("foobr\n", $capturedData);
+    }
+
+    /**
+     * @covers React\Stream\Stream::handleData
+     */
+    public function testDataErrorShouldEmitErrorAndClose()
+    {
+        $stream = fopen('php://temp', 'r+');
+
+        // add a filter which returns an error when encountering an 'a' when reading
+        Filter\append($stream, function ($chunk) {
+            if (strpos($chunk, 'a') !== false) {
+                throw new \Exception('Invalid');
+            }
+            return $chunk;
+        }, STREAM_FILTER_READ);
+
+        $loop = $this->createLoopMock();
+
+        $conn = new Stream($stream, $loop);
+        $conn->on('data', $this->expectCallableNever());
+        $conn->on('error', $this->expectCallableOnce());
+        $conn->on('close', $this->expectCallableOnce());
 
         fwrite($stream, "foobar\n");
         rewind($stream);

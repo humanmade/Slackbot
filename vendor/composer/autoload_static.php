@@ -11,6 +11,17 @@ class ComposerStaticInitb210df0fa40c39f5c1a7491bf86fdf87
     );
 
     public static $prefixLengthsPsr4 = array (
+        'Z' => 
+        array (
+            'Zend\\Validator\\' => 15,
+            'Zend\\Uri\\' => 9,
+            'Zend\\Stdlib\\' => 12,
+            'Zend\\ServiceManager\\' => 20,
+            'Zend\\Log\\' => 9,
+            'Zend\\Loader\\' => 12,
+            'Zend\\Http\\' => 10,
+            'Zend\\Escaper\\' => 13,
+        ),
         'R' => 
         array (
             'React\\Stream\\' => 13,
@@ -21,9 +32,49 @@ class ComposerStaticInitb210df0fa40c39f5c1a7491bf86fdf87
             'React\\Dns\\' => 10,
             'React\\Cache\\' => 12,
         ),
+        'P' => 
+        array (
+            'Psr\\Log\\' => 8,
+        ),
+        'I' => 
+        array (
+            'Interop\\Container\\' => 18,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'Zend\\Validator\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-validator/src',
+        ),
+        'Zend\\Uri\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-uri/src',
+        ),
+        'Zend\\Stdlib\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-stdlib/src',
+        ),
+        'Zend\\ServiceManager\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-servicemanager/src',
+        ),
+        'Zend\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-log/src',
+        ),
+        'Zend\\Loader\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-loader/src',
+        ),
+        'Zend\\Http\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-http/src',
+        ),
+        'Zend\\Escaper\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-escaper/src',
+        ),
         'React\\Stream\\' => 
         array (
             0 => __DIR__ . '/..' . '/react/stream/src',
@@ -46,50 +97,23 @@ class ComposerStaticInitb210df0fa40c39f5c1a7491bf86fdf87
         ),
         'React\\Dns\\' => 
         array (
-            0 => __DIR__ . '/..' . '/react/dns',
+            0 => __DIR__ . '/..' . '/react/dns/src',
         ),
         'React\\Cache\\' => 
         array (
-            0 => __DIR__ . '/..' . '/react/cache',
+            0 => __DIR__ . '/..' . '/react/cache/src',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
+        'Interop\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/container-interop/container-interop/src/Interop/Container',
         ),
     );
 
     public static $prefixesPsr0 = array (
-        'Z' => 
-        array (
-            'Zend\\Validator\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/zendframework/zend-validator',
-            ),
-            'Zend\\Uri\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/zendframework/zend-uri',
-            ),
-            'Zend\\Stdlib\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/zendframework/zend-stdlib',
-            ),
-            'Zend\\ServiceManager\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/zendframework/zend-servicemanager',
-            ),
-            'Zend\\Log\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/zendframework/zend-log',
-            ),
-            'Zend\\Loader\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/zendframework/zend-loader',
-            ),
-            'Zend\\Http\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/zendframework/zend-http',
-            ),
-            'Zend\\Escaper\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/zendframework/zend-escaper',
-            ),
-        ),
         'E' => 
         array (
             'Evenement' => 

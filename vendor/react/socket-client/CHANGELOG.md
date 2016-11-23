@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.4.5 (2016-03-27)
+
+This is a compatibility release that backports some changes from the v0.5
+release branch. You should consider upgrading to the v0.5 release.
+
+* Fix: PHP 5.6+ uses new SSL/TLS context options backported (#65 by @clue)
+* Fix: Move SSL/TLS context options to SecureConnector (#43 by @clue)
+
+## 0.4.4 (2015-09-23)
+
+* Feature: Add support for Unix domain sockets (UDS) (#41 by @clue)
+* Bugfix: Explicitly set supported TLS versions for PHP 5.6+ (#31 by @WyriHaximus)
+* Bugfix: Ignore SSL non-draining buffer workaround for PHP 5.6.8+ (#33 by @alexmace)
+
+## 0.4.3 (2015-03-20)
+
+* Bugfix: Set peer name to hostname to correct security concern in PHP 5.6 (@WyriHaximus)
+* Bugfix: Always wrap secure to pull buffer due to regression in PHP
+* Bugfix: SecureStream extends Stream to match documentation preventing BC (@clue)
+
 ## 0.4.2 (2014-10-16)
 
 * Bugfix: Only toggle the stream crypto handshake once (@DaveRandom and @rdlowrey)

@@ -1,5 +1,6 @@
 {
 	"require": {
-		"devristo/phpws": "dev-master"
+		"devristo/phpws": "dev-master",
+		"php": "^7.0"
 	}
 }

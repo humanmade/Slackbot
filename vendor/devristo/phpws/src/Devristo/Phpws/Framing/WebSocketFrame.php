@@ -119,7 +119,7 @@ class WebSocketFrame implements WebSocketFrameInterface
 
         $key = 0;
         if ($this->mask) {
-            $key = pack("N", rand(0, pow(255, 4) - 1));
+            $key = pack("N", rand(0, PHP_INT_MAX));
             $encoded .= $key;
         }
 
@@ -137,7 +137,8 @@ class WebSocketFrame implements WebSocketFrameInterface
         $frame = new self();
 
         // Read the first two bytes, then chop them off
-        list($firstByte, $secondByte) = substr($buffer, 0, 2);
+        $firstByte = substr($buffer, 0, 1);
+        $secondByte = substr($buffer, 1, 1);
         $raw = substr($buffer, 2);
 
         $firstByte = ord($firstByte);

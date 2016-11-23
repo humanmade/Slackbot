@@ -68,7 +68,8 @@ class WebSocket extends EventEmitter
             throw new WebSocketInvalidUrlScheme();
 
         $dnsResolverFactory = new \React\Dns\Resolver\Factory();
-        $this->dns = $dnsResolverFactory->createCached('8.8.8.8', $loop);
+        $server = false === getenv('DNS_SERVER') ? '8.8.8.8' : getenv('DNS_SERVER');
+        $this->dns = $dnsResolverFactory->createCached($server, $loop);
     }
 
     public function open($timeOut=null)
@@ -92,14 +93,14 @@ class WebSocket extends EventEmitter
         $deferred = new Deferred();
 
         $connector->create($uri->getHost(), $uri->getPort() ?: $defaultPort)
-            ->then(function (\React\Stream\Stream $stream) use ($that, $uri, $deferred, $timeOut){
+            ->then(function (\React\Stream\DuplexStreamInterface $stream) use ($that, $uri, $deferred, $timeOut){
 
                 if($timeOut){
-                    $timeOutTimer = $that->loop->addTimer($timeOut, function() use($promise, $stream, $that){
+                    $timeOutTimer = $that->loop->addTimer($timeOut, function() use($deferred, $stream, $that){
                         $stream->close();
                         $that->logger->notice("Timeout occured, closing connection");
                         $that->emit("error");
-                        $promise->reject("Timeout occured");
+                        $deferred->reject("Timeout occured");
                     });
                 } else $timeOutTimer = null;
 
@@ -111,6 +112,7 @@ class WebSocket extends EventEmitter
                 $stream->on("close", function() use($that){
                     $that->isClosing = false;
                     $that->state = WebSocket::STATE_CLOSED;
+                    $that->emit('close');
                 });
 
                 // Give the chance to change request
@@ -141,8 +143,9 @@ class WebSocket extends EventEmitter
 
                 $transport->initiateHandshake($uri);
                 $that->state = WebSocket::STATE_HANDSHAKE_SENT;
-            }, function($reason) use ($that)
+            }, function($reason) use ($that, $deferred)
             {
+                $deferred->reject($reason);
                 $that->logger->err($reason);
             });
 
@@ -185,5 +188,10 @@ class WebSocket extends EventEmitter
             if ($closeTimer)
                 $loop->cancelTimer($closeTimer);
         });
+    }
+
+    public function getState()
+    {
+        return $this->state;
     }
 }

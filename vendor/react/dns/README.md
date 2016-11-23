@@ -1,5 +1,7 @@
 # Dns Component
 
+[![Build Status](https://secure.travis-ci.org/reactphp/dns.png?branch=master)](http://travis-ci.org/reactphp/dns) [![Code Climate](https://codeclimate.com/github/reactphp/dns/badges/gpa.svg)](https://codeclimate.com/github/reactphp/dns)
+
 Async DNS resolver.
 
 The main point of the DNS component is to provide async DNS resolution.
@@ -12,13 +14,25 @@ The most basic usage is to just create a resolver through the resolver
 factory. All you need to give it is a nameserver, then you can start resolving
 names, baby!
 
-    $loop = React\EventLoop\Factory::create();
-    $factory = new React\Dns\Resolver\Factory();
-    $dns = $factory->create('8.8.8.8', $loop);
+```php
+$loop = React\EventLoop\Factory::create();
+$factory = new React\Dns\Resolver\Factory();
+$dns = $factory->create('8.8.8.8', $loop);
 
-    $dns->resolve('igor.io')->then(function ($ip) {
-        echo "Host: $ip\n";
-    });
+$dns->resolve('igor.io')->then(function ($ip) {
+    echo "Host: $ip\n";
+});
+
+$loop->run();
+```
+
+Pending DNS queries can be cancelled by cancelling its pending promise like so:
+
+```php
+$promise = $resolver->resolve('reactphp.org');
+
+$promise->cancel();
+```
 
 But there's more.
 
@@ -26,30 +40,66 @@ But there's more.
 
 You can cache results by configuring the resolver to use a `CachedExecutor`:
 
-    $loop = React\EventLoop\Factory::create();
-    $factory = new React\Dns\Resolver\Factory();
-    $dns = $factory->createCached('8.8.8.8', $loop);
+```php
+$loop = React\EventLoop\Factory::create();
+$factory = new React\Dns\Resolver\Factory();
+$dns = $factory->createCached('8.8.8.8', $loop);
 
-    $dns->resolve('igor.io')->then(function ($ip) {
-        echo "Host: $ip\n";
-    });
+$dns->resolve('igor.io')->then(function ($ip) {
+    echo "Host: $ip\n";
+});
 
-    ...
+...
 
-    $dns->resolve('igor.io')->then(function ($ip) {
-        echo "Host: $ip\n";
-    });
+$dns->resolve('igor.io')->then(function ($ip) {
+    echo "Host: $ip\n";
+});
+
+$loop->run();
+```
 
 If the first call returns before the second, only one query will be executed.
 The second result will be served from cache.
 
-## Todo
+### Custom cache adapter
 
-* Implement message body parsing for types other than A and CNAME: NS, SOA, PTR, MX, TXT, AAAA
-* Implement `authority` and `additional` message parts
-* Respect /etc/hosts
+By default, the above will use an in memory cache.
 
-# References
+You can also specify a custom cache implementing [`CacheInterface`](https://github.com/reactphp/cache) to handle the record cache instead:
 
-* [RFC1034](http://tools.ietf.org/html/rfc1034) Domain Names - Concepts and Facilities
-* [RFC1035](http://tools.ietf.org/html/rfc1035) Domain Names - Implementation and Specification
+```php
+$cache = new React\Cache\ArrayCache();
+$loop = React\EventLoop\Factory::create();
+$factory = new React\Dns\Resolver\Factory();
+$dns = $factory->createCached('8.8.8.8', $loop, $cache);
+```
+
+See also the wiki for possible [cache implementations](https://github.com/reactphp/react/wiki/Users#cache-implementations).
+
+## Install
+
+The recommended way to install this library is [through Composer](http://getcomposer.org).
+[New to Composer?](http://getcomposer.org/doc/00-intro.md)
+
+This will install the latest supported version:
+
+```bash
+$ composer require react/dns:~0.4.0
+```
+
+If you care a lot about BC, you may also want to look into supporting legacy versions:
+
+```bash
+$ composer require "react/dns:~0.4.0|~0.3.0"
+```
+
+More details and upgrade guides can be found in the [CHANGELOG](CHANGELOG.md).
+
+## License
+
+MIT, see [LICENSE file](LICENSE).
+
+## References
+
+* [RFC 1034](http://tools.ietf.org/html/rfc1034) Domain Names - Concepts and Facilities
+* [RFC 1035](http://tools.ietf.org/html/rfc1035) Domain Names - Implementation and Specification
