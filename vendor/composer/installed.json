@@ -144,51 +144,6 @@
         ]
     },
     {
-        "name": "react/event-loop",
-        "version": "v0.4.1",
-        "version_normalized": "0.4.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/reactphp/event-loop.git",
-            "reference": "18c5297087ca01de85518e2b55078f444144aa1b"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/reactphp/event-loop/zipball/18c5297087ca01de85518e2b55078f444144aa1b",
-            "reference": "18c5297087ca01de85518e2b55078f444144aa1b",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.4.0"
-        },
-        "suggest": {
-            "ext-event": "~1.0",
-            "ext-libev": "*",
-            "ext-libevent": ">=0.1.0"
-        },
-        "time": "2014-02-26 17:36:58",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "0.4-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "React\\EventLoop\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "Event loop abstraction layer that libraries can use for evented I/O.",
-        "keywords": [
-            "event-loop"
-        ]
-    },
-    {
         "name": "react/socket",
         "version": "v0.4.2",
         "version_normalized": "0.4.2.0",
@@ -367,12 +322,12 @@
         "target-dir": "Zend/Stdlib",
         "source": {
             "type": "git",
-            "url": "https://github.com/zendframework/Component_ZendStdlib.git",
+            "url": "https://github.com/zendframework/zend-stdlib.git",
             "reference": "280e4ee6a8fea96b3de00a39174758b4002a7358"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/zendframework/Component_ZendStdlib/zipball/280e4ee6a8fea96b3de00a39174758b4002a7358",
+            "url": "https://api.github.com/repos/zendframework/zend-stdlib/zipball/280e4ee6a8fea96b3de00a39174758b4002a7358",
             "reference": "280e4ee6a8fea96b3de00a39174758b4002a7358",
             "shasum": ""
         },
@@ -422,12 +377,12 @@
         "target-dir": "Zend/Validator",
         "source": {
             "type": "git",
-            "url": "https://github.com/zendframework/Component_ZendValidator.git",
+            "url": "https://github.com/zendframework/zend-validator.git",
             "reference": "f048d85d523c9bb2b16f0660412560efd9d257c1"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/zendframework/Component_ZendValidator/zipball/f048d85d523c9bb2b16f0660412560efd9d257c1",
+            "url": "https://api.github.com/repos/zendframework/zend-validator/zipball/f048d85d523c9bb2b16f0660412560efd9d257c1",
             "reference": "f048d85d523c9bb2b16f0660412560efd9d257c1",
             "shasum": ""
         },
@@ -486,12 +441,12 @@
         "target-dir": "Zend/Escaper",
         "source": {
             "type": "git",
-            "url": "https://github.com/zendframework/Component_ZendEscaper.git",
+            "url": "https://github.com/zendframework/zend-escaper.git",
             "reference": "67c8f76ff6d899a5619a4ab27c3b46ed3ae743fc"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/zendframework/Component_ZendEscaper/zipball/67c8f76ff6d899a5619a4ab27c3b46ed3ae743fc",
+            "url": "https://api.github.com/repos/zendframework/zend-escaper/zipball/67c8f76ff6d899a5619a4ab27c3b46ed3ae743fc",
             "reference": "67c8f76ff6d899a5619a4ab27c3b46ed3ae743fc",
             "shasum": ""
         },
@@ -529,12 +484,12 @@
         "target-dir": "Zend/Uri",
         "source": {
             "type": "git",
-            "url": "https://github.com/zendframework/Component_ZendUri.git",
+            "url": "https://github.com/zendframework/zend-uri.git",
             "reference": "72c7e6b146b6d16e71c5529bfcdb45a7148adc33"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/zendframework/Component_ZendUri/zipball/72c7e6b146b6d16e71c5529bfcdb45a7148adc33",
+            "url": "https://api.github.com/repos/zendframework/zend-uri/zipball/72c7e6b146b6d16e71c5529bfcdb45a7148adc33",
             "reference": "72c7e6b146b6d16e71c5529bfcdb45a7148adc33",
             "shasum": ""
         },
@@ -575,12 +530,12 @@
         "target-dir": "Zend/Loader",
         "source": {
             "type": "git",
-            "url": "https://github.com/zendframework/Component_ZendLoader.git",
+            "url": "https://github.com/zendframework/zend-loader.git",
             "reference": "521ba8650f70d512f9790921153d39eedcabed43"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/zendframework/Component_ZendLoader/zipball/521ba8650f70d512f9790921153d39eedcabed43",
+            "url": "https://api.github.com/repos/zendframework/zend-loader/zipball/521ba8650f70d512f9790921153d39eedcabed43",
             "reference": "521ba8650f70d512f9790921153d39eedcabed43",
             "shasum": ""
         },
@@ -618,12 +573,12 @@
         "target-dir": "Zend/Http",
         "source": {
             "type": "git",
-            "url": "https://github.com/zendframework/Component_ZendHttp.git",
+            "url": "https://github.com/zendframework/zend-http.git",
             "reference": "1758f768120fdd173e22ed45230a8e49b6155766"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/zendframework/Component_ZendHttp/zipball/1758f768120fdd173e22ed45230a8e49b6155766",
+            "url": "https://api.github.com/repos/zendframework/zend-http/zipball/1758f768120fdd173e22ed45230a8e49b6155766",
             "reference": "1758f768120fdd173e22ed45230a8e49b6155766",
             "shasum": ""
         },
@@ -666,12 +621,12 @@
         "target-dir": "Zend/ServiceManager",
         "source": {
             "type": "git",
-            "url": "https://github.com/zendframework/Component_ZendServiceManager.git",
+            "url": "https://github.com/zendframework/zend-servicemanager.git",
             "reference": "148b1ce06fa0ac7fe58e3bd396df57f1ee0e9e82"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/zendframework/Component_ZendServiceManager/zipball/148b1ce06fa0ac7fe58e3bd396df57f1ee0e9e82",
+            "url": "https://api.github.com/repos/zendframework/zend-servicemanager/zipball/148b1ce06fa0ac7fe58e3bd396df57f1ee0e9e82",
             "reference": "148b1ce06fa0ac7fe58e3bd396df57f1ee0e9e82",
             "shasum": ""
         },
@@ -716,12 +671,12 @@
         "target-dir": "Zend/Log",
         "source": {
             "type": "git",
-            "url": "https://github.com/zendframework/Component_ZendLog.git",
+            "url": "https://github.com/zendframework/zend-log.git",
             "reference": "b2653cec1c7e456012885833c680013e4108eb64"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/zendframework/Component_ZendLog/zipball/b2653cec1c7e456012885833c680013e4108eb64",
+            "url": "https://api.github.com/repos/zendframework/zend-log/zipball/b2653cec1c7e456012885833c680013e4108eb64",
             "reference": "b2653cec1c7e456012885833c680013e4108eb64",
             "shasum": ""
         },
@@ -808,5 +763,51 @@
             }
         ],
         "description": "WebSocket Server and Client library for PHP"
+    },
+    {
+        "name": "react/event-loop",
+        "version": "v0.4.2",
+        "version_normalized": "0.4.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/reactphp/event-loop.git",
+            "reference": "164799f73175e1c80bba92a220ea35df6ca371dd"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/reactphp/event-loop/zipball/164799f73175e1c80bba92a220ea35df6ca371dd",
+            "reference": "164799f73175e1c80bba92a220ea35df6ca371dd",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.4.0"
+        },
+        "suggest": {
+            "ext-event": "~1.0",
+            "ext-libev": "*",
+            "ext-libevent": ">=0.1.0"
+        },
+        "time": "2016-03-08 02:09:32",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "0.5-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "React\\EventLoop\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "Event loop abstraction layer that libraries can use for evented I/O.",
+        "keywords": [
+            "asynchronous",
+            "event-loop"
+        ]
     }
 ]

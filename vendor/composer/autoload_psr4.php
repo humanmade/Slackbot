@@ -10,7 +10,7 @@ return array(
     'React\\Socket\\' => array($vendorDir . '/react/socket/src'),
     'React\\SocketClient\\' => array($vendorDir . '/react/socket-client/src'),
     'React\\Promise\\' => array($vendorDir . '/react/promise/src'),
-    'React\\EventLoop\\' => array($vendorDir . '/react/event-loop'),
+    'React\\EventLoop\\' => array($vendorDir . '/react/event-loop/src'),
     'React\\Dns\\' => array($vendorDir . '/react/dns'),
     'React\\Cache\\' => array($vendorDir . '/react/cache'),
 );
