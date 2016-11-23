@@ -4,6 +4,7 @@ namespace React\EventLoop;
 
 use Event;
 use EventBase;
+use EventConfig as EventBaseConfig;
 use React\EventLoop\Tick\FutureTickQueue;
 use React\EventLoop\Tick\NextTickQueue;
 use React\EventLoop\Timer\Timer;
@@ -27,9 +28,9 @@ class ExtEventLoop implements LoopInterface
     private $writeListeners = [];
     private $running;
 
-    public function __construct()
+    public function __construct(EventBaseConfig $config = null)
     {
-        $this->eventBase = new EventBase();
+        $this->eventBase = new EventBase($config);
         $this->nextTickQueue = new NextTickQueue($this);
         $this->futureTickQueue = new FutureTickQueue($this);
         $this->timerEvents = new SplObjectStorage();
@@ -235,8 +236,8 @@ class ExtEventLoop implements LoopInterface
     /**
      * Create a new ext-event Event object, or update the existing one.
      *
-     * @param stream  $stream
-     * @param integer $flag   Event::READ or Event::WRITE
+     * @param resource $stream
+     * @param integer  $flag   Event::READ or Event::WRITE
      */
     private function subscribeStreamEvent($stream, $flag)
     {
@@ -262,8 +263,8 @@ class ExtEventLoop implements LoopInterface
      * Update the ext-event Event object for this stream to stop listening to
      * the given event type, or remove it entirely if it's no longer needed.
      *
-     * @param stream  $stream
-     * @param integer $flag   Event::READ or Event::WRITE
+     * @param resource $stream
+     * @param integer  $flag   Event::READ or Event::WRITE
      */
     private function unsubscribeStreamEvent($stream, $flag)
     {
@@ -293,7 +294,7 @@ class ExtEventLoop implements LoopInterface
      */
     private function createTimerCallback()
     {
-        $this->timerCallback = function ($_, $_, $timer) {
+        $this->timerCallback = function ($_, $__, $timer) {
             call_user_func($timer->getCallback(), $timer);
 
             if (!$timer->isPeriodic() && $this->isTimerActive($timer)) {
